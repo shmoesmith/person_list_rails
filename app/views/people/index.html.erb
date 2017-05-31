@@ -3,4 +3,6 @@
 <% @people.each do |person|  %>
 <h2><%= person.name %></h2>
 <%= link_to 'Show Details', person_path(person) %>
+<%= link_to 'Update Individual', edit_person_path(person) %>
+<%= link_to 'Remove Individual', person, method: :delete %>
 <% end %>

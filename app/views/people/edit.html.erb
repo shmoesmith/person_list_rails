@@ -1,0 +1,28 @@
+<h1>Update <%= @person %></h1>
+<%= form_for @person do |f| %>
+<%= f.label :name %>
+<%= f.text_field :name %>
+<br />
+
+<%= f.label :age %>
+<%= f.text_field :age%>
+<br />
+
+<%= f.label :hair_color %>
+<%= f.text_field :hair_color %>
+<br />
+
+<%= f.label :eye_color %>
+<%= f.text_field :eye_color %>
+<br />
+
+<%= f.label :gender %>
+<%= f.text_field :gender%>
+<br />
+
+<%= f.check_box(:alive) %>
+<%= f.label(:alive, "This person is currently alive") %>
+<br />
+
+<%= f.submit %>
+<% end %>

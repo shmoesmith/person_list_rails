@@ -9,6 +9,25 @@ class PeopleController < ApplicationController
     @person = Person.find(params[:id])
   end
 
+  def edit
+    @person = Person.find(params[:id])
+  end
+
+  def update
+    @person = Person.find(params[:id])
+      if @person.update(person_params)
+        redirect_to people_path
+      else
+        render :edit
+      end
+  end
+
+def destroy
+  @person = Person.find(params[:id])
+  @person.destroy
+  redirect_to people_path
+end
+
   def new
     @person = Person.new
   end
