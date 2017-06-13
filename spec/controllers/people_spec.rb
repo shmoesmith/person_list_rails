@@ -14,6 +14,8 @@ RSpec.describe PeopleController, type: :controller do
         end
 
         it "renders the index view" do
+            get :index
+            expect(response).to render_template(:index)
         end
     end
 
@@ -22,15 +24,38 @@ RSpec.describe PeopleController, type: :controller do
             person = Person.create(name: "george", age:28, hair_color: "brown", 
                                     eye_color: 'orange', gender: 'male', alive: true)
             get :show, params: { id: person.id }            
-            expect(response).to have_http_status(:success)        
+            expect(response).to have_http_status(:success)       
+         end
+         
+        it "renders the show view" do
+            person = Person.create(name: "george", age:28, hair_color: "brown", 
+                                    eye_color: 'orange', gender: 'male', alive: true)
+            get :show, params: { id: person.id }    
+            expect(response).to render_template(:show)
         end
-    
+
+        it "sets the person instance variable" do
+            person = Person.create(name: "george", age:28, hair_color: "brown", 
+                                    eye_color: 'orange', gender: 'male', alive: true)
+            get :show, params: { id: person.id } 
+            expect(assigns(:person).name).to eq(person.name)
+        end
     end
 
     describe "GET #new" do
         it "returns http success" do
         get :new
         expect(response).to have_http_status(:success)
+        end
+    
+        it "renders the new template" do 
+            get :new
+            expect(response).to render_template(:new)
+        end
+
+        it "sets the person instance variable" do
+            get :new
+            expect(assigns(:person)).to be_a_new(Person)
         end
     end
 
@@ -44,7 +69,6 @@ RSpec.describe PeopleController, type: :controller do
                                     eye_color: 'orange', gender: 'male', alive: true)
             get :edit, params: { id: person.id }
             expect(response).to have_http_status(:success)
-        
         end
     end
 
