@@ -16,12 +16,12 @@ ActiveRecord::Schema.define(version: 20170531193819) do
   enable_extension "plpgsql"
 
   create_table "people", force: :cascade do |t|
-    t.string "name"
-    t.integer "age"
-    t.string "hair_color"
-    t.string "eye_color"
-    t.string "gender"
-    t.boolean "alive"
+    t.string "name", null: false
+    t.integer "age", null: false
+    t.string "hair_color", null: false
+    t.string "eye_color", null: false
+    t.string "gender", null: false
+    t.boolean "alive", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
