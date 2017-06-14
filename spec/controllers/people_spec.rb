@@ -103,31 +103,25 @@ RSpec.describe PeopleController, type: :controller do
     end
 
     describe "PUT #update" do
-        it "sets the person instance variable" do
-            person = Person.create(name: "george", age:28, hair_color: "brown", 
-                                    eye_color: 'orange', gender: 'male', alive: true)
-            put :update, params: { id: person.id, person: { eye_color: 'blue' } }
-            expect(assigns(:person)).to eq(person)
-        end
+        let(:person) { FactoryGirl.create(:person) }
+        describe 'successful update tests' do
+            before(:each) { put :update, params: { id: person.id, person: { eye_color: 'blue' } } }
+            
+            it "sets the person instance variable" do                
+                expect(assigns(:person)).to eq(person)
+            end
 
-        it "updates the person in the database" do
-            person = Person.create(name: "george", age:28, hair_color: "brown", 
-                                    eye_color: 'orange', gender: 'male', alive: true)
-            put :update, params: { id: person.id, person: { eye_color: 'blue' } }
-            expect(person.reload.eye_color).to eq('blue')
-        end
+            it "updates the person in the database" do   
+                expect(person.reload.eye_color).to eq('blue')
+            end
 
-        it "redirects to person path upon success" do
-             person = Person.create(name: "george", age:28, hair_color: "brown", 
-                                    eye_color: 'orange', gender: 'male', alive: true)
-            put :update, params: { id: person.id, person: { eye_color: 'blue' } }
-            person = assigns(:person)
-            expect(response).to redirect_to(person_path(person))
+            it "redirects to person path upon success" do 
+                person = assigns(:person)
+                expect(response).to redirect_to(person_path(person))
+            end
         end
 
         it "renders edit page if unsuccesful" do 
-             person = Person.create(name: "george", age:28, hair_color: "brown", 
-                                    eye_color: 'orange', gender: 'male', alive: true)
             put :update, params: { id: person.id, person: { eye_color: '' } }
             expect(response).to render_template(:edit)
         end
