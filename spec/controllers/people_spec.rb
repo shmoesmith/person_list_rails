@@ -60,6 +60,30 @@ RSpec.describe PeopleController, type: :controller do
     end
 
     describe "POST #create" do
+        it "sets the person instance variable" do
+            post :create, params: { person: {name: "george", age:28, hair_color: "brown", 
+                                    eye_color: 'orange', gender: 'male', alive: true } }
+            expect(assigns(:person).name).to eq("george")                 
+        end
+
+        it "creates the person in the database" do
+            post :create, params: { person: {name: "george", age:28, hair_color: "brown", 
+                                        eye_color: 'orange', gender: 'male', alive: true } }
+            expect(Person.count).to eq(1)
+        end
+
+        it "redirects to the person path upon success" do
+            post :create, params: { person: {name: "george", age:28, hair_color: "brown", 
+                                        eye_color: 'orange', gender: 'male', alive: true } }
+            person = assigns(:person)
+            expect(response).to redirect_to(person_path(person))
+        end
+
+        it "renders the new page upon failure" do
+            post :create, params: { person: {name: "george", age:28, hair_color: "brown", 
+                                    eye_color: 'orange', gender: '', alive: true } }
+            expect(response).to render_template(:new)
+        end    
         
     end
 
@@ -101,11 +125,12 @@ RSpec.describe PeopleController, type: :controller do
             expect(person.reload.eye_color).to eq('blue')
         end
 
-        it "redirects to people path upon success" do
+        it "redirects to person path upon success" do
              person = Person.create(name: "george", age:28, hair_color: "brown", 
                                     eye_color: 'orange', gender: 'male', alive: true)
             put :update, params: { id: person.id, person: { eye_color: 'blue' } }
-            expect(response).to redirect_to(people_path)
+            person = assigns(:person)
+            expect(response).to redirect_to(person_path(person))
         end
 
         it "renders edit page if unsuccesful" do 
@@ -118,9 +143,26 @@ RSpec.describe PeopleController, type: :controller do
     end
 
     describe "DELETE #destroy" do
-     it "returns http success" do
-     
-     end
+        it "sets the person instance variable" do
+            person = Person.create(name: "george", age:28, hair_color: "brown", 
+                                    eye_color: 'orange', gender: 'male', alive: true)
+            delete :destroy, params: { id: person.id }
+            expect(assigns(:person)).to eq(person)
+        end
+
+        it "deletes the person from the database" do
+            person = Person.create(name: "george", age:28, hair_color: "brown", 
+                                    eye_color: 'orange', gender: 'male', alive: true)
+            delete :destroy, params: { id: person.id }
+            expect(Person.count).to eq(0)
+        end    
+
+        it "redirects to the people path" do
+            person = Person.create(name: "george", age:28, hair_color: "brown", 
+                                    eye_color: 'orange', gender: 'male', alive: true)
+            delete :destroy, params: { id: person.id }
+            expect(response).to redirect_to(people_path)
+        end
     end
 
 end
